@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'platform_core.apps.PlatformCoreConfig',
-    'accounts'
+    'accounts',
+    'hr_core',
 ]
 
 MIDDLEWARE = [
