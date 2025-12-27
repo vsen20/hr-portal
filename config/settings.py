@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'platform_core.apps.PlatformCoreConfig',
     'accounts',
     'hr_core',
+    'ui',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,9 @@ STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'accounts.User'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
