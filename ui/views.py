@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from hr_core.models import Employee, EmployeeDocument
+from hr_core.models import Employee, EmployeeDocument, Department, Position
 
 
 
@@ -71,3 +71,32 @@ def employee_detail(request, pk: int):
         {"employee": employee, "documents": documents},
     )
 
+@login_required
+def department_list(request):
+    if request.user.is_superuser:
+        departments = Department.objects.select_related("organization", "parent").all()
+        return render(request, "ui/departments/list.html", {"departments": departments})
+
+    me = getattr(request.user, "employee_profile", None)
+    if me is None:
+        return render(request, "ui/departments/list.html", {"departments": []})
+
+    departments = Department.objects.select_related("organization", "parent").filter(
+        organization=me.organization
+    )
+    return render(request, "ui/departments/list.html", {"departments": departments})
+
+@login_required
+def position_list(request):
+    if request.user.is_superuser:
+        positions = Position.objects.select_related("organization").all()
+        return render(request, "ui/positions/list.html", {"positions": positions})
+
+    me = getattr(request.user, "employee_profile", None)
+    if me is None:
+        return render(request, "ui/positions/list.html", {"positions": []})
+
+    positions = Position.objects.select_related("organization").filter(
+        organization=me.organization
+    )
+    return render(request, "ui/positions/list.html", {"positions": positions})
