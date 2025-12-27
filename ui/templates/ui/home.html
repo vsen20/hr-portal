@@ -1,20 +1,11 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>HR Portal</title>
-  </head>
-  <body>
-    <h1>HR Portal</h1>
-    <p>Logged in as: {{ request.user.username }}</p>
+{% extends "ui/base.html" %}
 
-    <ul>
-        <li><a href="{% url 'ui:employee_list' %}">Employees</a></li>
-        <li><a href="/accounts/logout/">Logout</a></li>
-        <li><a href="{% url 'ui:department_list' %}">Departments</a></li>
-        <li><a href="{% url 'ui:position_list' %}">Positions</a></li>
-    </ul>
+{% block title %}Home{% endblock %}
 
-    <p>Next: Employees / Departments / Positions pages.</p>
-  </body>
-</html>
+{% block content %}
+  <p>Logged in as: {{ request.user.username }}</p>
+
+  <p>
+    Use the navigation menu above to open Employees, Departments, Positions.
+  </p>
+{% endblock %}

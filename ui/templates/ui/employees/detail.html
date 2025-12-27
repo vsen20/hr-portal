@@ -1,79 +1,70 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Employee {{ employee.id }}</title>
-  </head>
-  <body>
-    <h1>Employee card</h1>
+{% extends "ui/base.html" %}
 
-    <p>
-      <a href="{% url 'ui:employee_list' %}">← Back to Employees</a> |
-      <a href="{% url 'ui:home' %}">Home</a> |
-      <a href="/accounts/logout/">Logout</a>
-    </p>
+{% block title %}Employee {{ employee.id }}{% endblock %}
 
-    <h2>{{ employee.last_name }} {{ employee.first_name }}</h2>
+{% block content %}
+  <p><a href="{% url 'ui:employee_list' %}">← Back to Employees</a></p>
 
-    <ul>
-      <li><strong>Organization:</strong> {{ employee.organization }}</li>
-      <li><strong>Status:</strong> {{ employee.employment_status }}</li>
-      <li><strong>Employment type:</strong> {{ employee.employment_type }}</li>
-      <li><strong>Hire date:</strong> {{ employee.hire_date|default:"—" }}</li>
-      <li><strong>Probation start:</strong> {{ employee.probation_start_date|default:"—" }}</li>
-      <li><strong>Probation end:</strong> {{ employee.probation_end_date|default:"—" }}</li>
-      <li><strong>Department:</strong> {{ employee.department|default:"—" }}</li>
-      <li><strong>Position:</strong> {{ employee.position|default:"—" }}</li>
-      <li>
-        <strong>Manager:</strong>
-        {% if employee.manager %}
-          {{ employee.manager.last_name }} {{ employee.manager.first_name }}
-        {% else %}
-          —
-        {% endif %}
-      </li>
-    </ul>
+  <h2>{{ employee.last_name }} {{ employee.first_name }}</h2>
 
-        <h3>Documents</h3>
+  <ul>
+    <li><strong>Organization:</strong> {{ employee.organization }}</li>
+    <li><strong>Status:</strong> {{ employee.employment_status }}</li>
+    <li><strong>Employment type:</strong> {{ employee.employment_type }}</li>
+    <li><strong>Hire date:</strong> {{ employee.hire_date|default:"—" }}</li>
+    <li><strong>Probation start:</strong> {{ employee.probation_start_date|default:"—" }}</li>
+    <li><strong>Probation end:</strong> {{ employee.probation_end_date|default:"—" }}</li>
+    <li><strong>Department:</strong> {{ employee.department|default:"—" }}</li>
+    <li><strong>Position:</strong> {{ employee.position|default:"—" }}</li>
+    <li>
+      <strong>Manager:</strong>
+      {% if employee.manager %}
+        {{ employee.manager.last_name }} {{ employee.manager.first_name }}
+      {% else %}
+        —
+      {% endif %}
+    </li>
+  </ul>
 
-    {% if documents %}
-      <table border="1" cellpadding="6">
-        <thead>
+  <h3>Documents</h3>
+  {% if documents %}
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Title</th>
+          <th>Identifier</th>
+          <th>Issued</th>
+          <th>File</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in documents %}
           <tr>
-            <th>Type</th>
-            <th>Title</th>
-            <th>Identifier</th>
-            <th>Issued</th>
-            <th>File</th>
-            <th>URL</th>
+            <td>{{ d.get_doc_type_display }}</td>
+            <td>{{ d.title|default:"—" }}</td>
+            <td>{{ d.identifier|default:"—" }}</td>
+            <td>{{ d.issued_date|default:"—" }}</td>
+            <td>
+              {% if d.file %}
+                <a href="{{ d.file.url }}" target="_blank">Download</a>
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              {% if d.url %}
+                <a href="{{ d.url }}" target="_blank">Open</a>
+              {% else %}
+                —
+              {% endif %}
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {% for d in documents %}
-            <tr>
-              <td>{{ d.get_doc_type_display }}</td>
-              <td>{{ d.title|default:"—" }}</td>
-              <td>{{ d.identifier|default:"—" }}</td>
-              <td>{{ d.issued_date|default:"—" }}</td>
-              <td>
-                {% if d.file %}
-                  <a href="{{ d.file.url }}" target="_blank">Download</a>
-                {% else %}
-                  —
-                {% endif %}
-              </td>
-              <td>
-                {% if d.url %}
-                  <a href="{{ d.url }}" target="_blank">Open</a>
-                {% else %}
-                  —
-                {% endif %}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>No documents.</p>
-    {% endif %}
-
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No documents.</p>
+  {% endif %}
+{% endblock %}
