@@ -2,6 +2,8 @@ from django.db import models
 
 from platform_core.models import Organization
 
+from django.conf import settings
+
 
 class Department(models.Model):
     organization = models.ForeignKey(
@@ -144,6 +146,14 @@ class Employee(models.Model):
         STAFF = "STAFF", "Staff"
         CONTRACTOR = "CONTRACTOR", "Contractor"
         
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employee_profile",
+    )
+    
     organization = models.ForeignKey(
         Organization,
         on_delete=models.CASCADE,
